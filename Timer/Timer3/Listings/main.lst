@@ -1,0 +1,103 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              07/13/2026 12:52:18 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.ls
+                    -t) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include <Delay.h>
+   3          #include <Timer0.h>
+   4          #include <Leds.h>
+   5          unsigned char Sec = 0;
+   6          unsigned char Min = 0;
+   7          unsigned char Hour = 0;
+   8          unsigned int Timer0Counts = 0;
+   9          unsigned char Sec1=0;
+  10          unsigned char Sec2=0;
+  11          unsigned char Min1=0;
+  12          unsigned char Min2=0;
+  13          unsigned char Hour1=0;
+  14          unsigned char Hour2=0;
+  15          unsigned char Time[9] = {255,255,255,255,255,255,255,255,255};
+  16          unsigned char i = 0;
+  17          void main()
+  18          {
+  19   1        Timer0_Init();
+  20   1        while(1)
+  21   1        {
+  22   2          if(Sec < 60)
+  23   2          {
+  24   3            Sec1 = Sec / 10;
+  25   3            Sec2 = Sec % 10;
+  26   3          }
+  27   2          if(Sec >= 60)
+  28   2          {
+  29   3            Min++;
+  30   3            Sec = 0;
+  31   3            if (Min < 60)
+  32   3            {
+  33   4              Min1 = Min / 10;
+  34   4              Min2 = Min % 10;
+  35   4            }
+  36   3            if(Min >= 60)
+  37   3            {
+  38   4              Hour++;
+  39   4              Min = 0;
+  40   4              Hour1 = Hour / 10;
+  41   4              Hour2 = Hour % 10;
+  42   4            }
+  43   3          }
+  44   2          Time[1] = Hour1;
+  45   2          Time[2] = Hour2;
+  46   2          Time[3] = 100;
+  47   2          Time[4] = Min1;
+  48   2          Time[5] = Min2;
+  49   2          Time[6] = 100;
+  50   2          Time[7] = Sec1;
+  51   2          Time[8] = Sec2;
+  52   2          
+  53   2          for ( i = 1;i<=8;i++)
+  54   2          {
+C51 COMPILER V9.60.7.0   MAIN                                                              07/13/2026 12:52:18 PAGE 2   
+
+  55   3            Leds(i,Time[i]);
+  56   3          }
+  57   2            
+  58   2        
+  59   2        }
+  60   1      }
+  61          
+  62          
+  63          void Timer0() interrupt 1
+  64          {
+  65   1          TL0 = 0x18;
+  66   1          TH0 = 0xFC;
+  67   1          Timer0Counts++;
+  68   1          if (Timer0Counts >=1000)
+  69   1          {
+  70   2            Timer0Counts = 0;
+  71   2            Sec++;
+  72   2            if (Sec >= 60)
+  73   2              Sec = 60;
+  74   2          }
+  75   1      }
+  76            
+  77            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    190    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     21    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

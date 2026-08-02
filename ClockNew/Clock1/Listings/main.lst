@@ -1,0 +1,294 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              07/26/2026 21:43:03 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.ls
+                    -t) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "LCD1602.h"
+   4          #include "Key.h"
+   5          #include "DS1302.h"
+   6          #include "Timer0.h"
+   7          
+   8          #define Second  0x80
+   9          #define Minute  0x82
+  10          #define Hour    0x84
+  11          #define Date    0x86
+  12          #define Month   0x88
+  13          #define Day     0x8A
+  14          #define Year    0x8C
+  15          #define WP      0x8E
+  16          unsigned char KeyNum,MODE = 0,TimeSetSelect = 0,TimeSetFlashFlag;
+  17          void DS1302_TimeSet()
+  18          {
+  19   1        if (KeyNum == 2)
+  20   1        {
+  21   2          TimeSetSelect++;
+  22   2          TimeSetSelect %= 7;
+  23   2        }
+  24   1        if (KeyNum == 4)
+  25   1        {
+  26   2          RealTime[TimeSetSelect]++;
+  27   2          if (TimeSetSelect == 0)
+  28   2          {
+  29   3            if (RealTime[TimeSetSelect] > 99)
+  30   3            RealTime[TimeSetSelect] = 00;
+  31   3          }
+  32   2          else if (TimeSetSelect == 1)
+  33   2          {
+  34   3            if (RealTime[TimeSetSelect] > 12)
+  35   3            RealTime[TimeSetSelect] = 01;
+  36   3            if (RealTime[1] == 4 || RealTime[1] == 6 || RealTime[1] == 9 || RealTime[1] == 11)
+  37   3            {
+  38   4              if (RealTime[2] > 30)
+  39   4              RealTime[2] = 01;
+  40   4      
+  41   4            }
+  42   3            else if (RealTime[1] == 2)
+  43   3            {
+  44   4              if (RealTime[0] % 4 == 0)
+  45   4              {
+  46   5                if (RealTime[2] > 29)
+  47   5                RealTime[2] = 01;
+  48   5      
+  49   5              }
+  50   4              else 
+  51   4              {
+  52   5                if (RealTime[2] > 28)
+  53   5                RealTime[2] = 01;
+  54   5      
+C51 COMPILER V9.60.7.0   MAIN                                                              07/26/2026 21:43:03 PAGE 2   
+
+  55   5              }
+  56   4            }
+  57   3          } 
+  58   2          else if (TimeSetSelect == 2)
+  59   2          {
+  60   3            if (RealTime[1] == 1 || RealTime[1] == 3 || RealTime[1] == 5 || RealTime[1] == 7 || RealTime[1] == 8 ||
+             - RealTime[1] == 10 || RealTime[1] == 12)
+  61   3            {
+  62   4              if (RealTime[TimeSetSelect] > 31)
+  63   4              RealTime[TimeSetSelect] = 01;
+  64   4            }
+  65   3            else if (RealTime[1] == 4 || RealTime[1] == 6 || RealTime[1] == 9 || RealTime[1] == 11)
+  66   3            {
+  67   4              if (RealTime[TimeSetSelect] > 30)
+  68   4              RealTime[TimeSetSelect] = 01;
+  69   4            }
+  70   3            else if (RealTime[1] == 2)
+  71   3            {
+  72   4              if (RealTime[0] % 4 == 0)
+  73   4              {
+  74   5                if (RealTime[TimeSetSelect] > 29)
+  75   5                RealTime[TimeSetSelect] = 01;
+  76   5              }
+  77   4              else 
+  78   4              {
+  79   5                if (RealTime[TimeSetSelect] > 28)
+  80   5                RealTime[TimeSetSelect] = 01;
+  81   5              }
+  82   4            }
+  83   3          }
+  84   2          else if (TimeSetSelect == 3)
+  85   2          {
+  86   3            if (RealTime[TimeSetSelect] > 7)
+  87   3            RealTime[TimeSetSelect] = 1;
+  88   3          }
+  89   2          else if (TimeSetSelect == 4)
+  90   2          {
+  91   3            if (RealTime[TimeSetSelect] > 23)
+  92   3            RealTime[TimeSetSelect] = 00;
+  93   3          }
+  94   2          else if (TimeSetSelect == 5)
+  95   2          {
+  96   3            if (RealTime[TimeSetSelect] > 59)
+  97   3            RealTime[TimeSetSelect] = 00;
+  98   3          }
+  99   2          else if (TimeSetSelect == 6)
+ 100   2          {
+ 101   3            if (RealTime[TimeSetSelect] > 59)
+ 102   3            RealTime[TimeSetSelect] = 00;
+ 103   3          }
+ 104   2          
+ 105   2        }
+ 106   1        if (KeyNum == 3)
+ 107   1        {
+ 108   2          RealTime[TimeSetSelect]--;
+ 109   2          if (TimeSetSelect == 0)
+ 110   2          {
+ 111   3            if (RealTime[TimeSetSelect] < 0)
+ 112   3            RealTime[TimeSetSelect] = 99;
+ 113   3          }
+ 114   2          else if (TimeSetSelect == 1)
+ 115   2          {
+C51 COMPILER V9.60.7.0   MAIN                                                              07/26/2026 21:43:03 PAGE 3   
+
+ 116   3            if (RealTime[TimeSetSelect] < 1)
+ 117   3            RealTime[TimeSetSelect] = 12;
+ 118   3      
+ 119   3            if (RealTime[1] == 4 || RealTime[1] == 6 || RealTime[1] == 9 || RealTime[1] == 11)
+ 120   3            {
+ 121   4              if (RealTime[2] > 30)
+ 122   4              RealTime[2] = 01;
+ 123   4      
+ 124   4            }
+ 125   3            else if (RealTime[1] == 2)
+ 126   3            {
+ 127   4              if (RealTime[0] % 4 == 0)
+ 128   4              {
+ 129   5                if (RealTime[2] > 29)
+ 130   5                RealTime[2] = 01;
+ 131   5      
+ 132   5              }
+ 133   4              else 
+ 134   4              {
+ 135   5                if (RealTime[2] > 28)
+ 136   5                RealTime[2] = 01;
+ 137   5      
+ 138   5              }
+ 139   4            }
+ 140   3      
+ 141   3          } 
+ 142   2          else if (TimeSetSelect == 2)
+ 143   2          {
+ 144   3            if (RealTime[1] == 1 || RealTime[1] == 3 || RealTime[1] == 5 || RealTime[1] == 7 || RealTime[1] == 8 ||
+             - RealTime[1] == 10 || RealTime[1] == 12)
+ 145   3            {
+ 146   4              if (RealTime[TimeSetSelect] < 1)
+ 147   4              RealTime[TimeSetSelect] = 31;
+ 148   4      
+ 149   4            }
+ 150   3            else if (RealTime[1] == 4 || RealTime[1] == 6 || RealTime[1] == 9 || RealTime[1] == 11)
+ 151   3            {
+ 152   4              if (RealTime[TimeSetSelect] < 1)
+ 153   4              RealTime[TimeSetSelect] = 30;
+ 154   4      
+ 155   4            }
+ 156   3            else if (RealTime[1] == 2)
+ 157   3            {
+ 158   4              if (RealTime[0] % 4 == 0)
+ 159   4              {
+ 160   5                if (RealTime[TimeSetSelect] < 1)
+ 161   5                RealTime[TimeSetSelect] = 29;
+ 162   5      
+ 163   5              }
+ 164   4              else 
+ 165   4              {
+ 166   5                if (RealTime[TimeSetSelect] < 1)
+ 167   5                RealTime[TimeSetSelect] = 28;
+ 168   5      
+ 169   5              }
+ 170   4            }
+ 171   3          }
+ 172   2          
+ 173   2          else if (TimeSetSelect == 3)
+ 174   2          {
+ 175   3            if (RealTime[TimeSetSelect] < 1)
+ 176   3            RealTime[TimeSetSelect] = 7;
+C51 COMPILER V9.60.7.0   MAIN                                                              07/26/2026 21:43:03 PAGE 4   
+
+ 177   3          }
+ 178   2          else if (TimeSetSelect == 4)
+ 179   2          {
+ 180   3            if (RealTime[TimeSetSelect] < 00)
+ 181   3            RealTime[TimeSetSelect] = 23;
+ 182   3          }
+ 183   2          else if (TimeSetSelect == 5)
+ 184   2          {
+ 185   3            if (RealTime[TimeSetSelect] < 00)
+ 186   3            RealTime[TimeSetSelect] = 59;
+ 187   3          }
+ 188   2          else if (TimeSetSelect == 6)
+ 189   2          {
+ 190   3            if (RealTime[TimeSetSelect] < 00)
+ 191   3            RealTime[TimeSetSelect] = 59;
+ 192   3          }
+ 193   2          
+ 194   2        }
+ 195   1      
+ 196   1        DS1302_SetRealTime();
+ 197   1        if (TimeSetSelect == 0 && TimeSetFlashFlag == 1){LCD1602_ShowString(1,3,"  ");}
+ 198   1        else {LCD1602_ShowNum(1,3,RealTime[0],2);}//年
+ 199   1        if (TimeSetSelect == 1 && TimeSetFlashFlag == 1){LCD1602_ShowString(1,6,"  ");}
+ 200   1        else {LCD1602_ShowNum(1,6,RealTime[1],2);}//月
+ 201   1        if (TimeSetSelect == 2 && TimeSetFlashFlag == 1){LCD1602_ShowString(1,9,"  ");}
+ 202   1        else {LCD1602_ShowNum(1,9,RealTime[2],2);}//日
+ 203   1        if (TimeSetSelect == 3 && TimeSetFlashFlag == 1){LCD1602_ShowChar(1,16,' ');}
+ 204   1        else {LCD1602_ShowNum(1,16,RealTime[3],1);}//星期
+ 205   1        if (TimeSetSelect == 4 && TimeSetFlashFlag == 1){LCD1602_ShowString(2,1,"  ");}
+ 206   1        else {LCD1602_ShowNum(2,1,RealTime[4],2);}//时
+ 207   1        if (TimeSetSelect == 5 && TimeSetFlashFlag == 1){LCD1602_ShowString(2,4,"  ");}
+ 208   1        else {LCD1602_ShowNum(2,4,RealTime[5],2);}//分
+ 209   1        if (TimeSetSelect == 6 && TimeSetFlashFlag == 1){LCD1602_ShowString(2,7,"  ");}
+ 210   1        else {LCD1602_ShowNum(2,7,RealTime[6],2);}//秒
+ 211   1      
+ 212   1      }
+ 213          void main()
+ 214          {
+ 215   1        LCD1602_Init();//初始化LCD1602显示屏
+ 216   1        DS1302_Init();//初始化DS1302
+ 217   1        DS1302_SetTime();//写入时间
+ 218   1        Timer0_Init();
+ 219   1      
+ 220   1        while(1)
+ 221   1        {
+ 222   2          KeyNum = Key();
+ 223   2          if (KeyNum == 1)
+ 224   2          {
+ 225   3            if (MODE == 0)
+ 226   3            {
+ 227   4              MODE = 1;
+ 228   4              TimeSetSelect = 0;
+ 229   4            }
+ 230   3            else if (MODE == 1)
+ 231   3            {
+ 232   4              MODE = 0;
+ 233   4            }
+ 234   3          }
+ 235   2          switch (MODE)
+ 236   2          {
+ 237   3            case 0: DS1302_TimeShow();break;
+ 238   3            case 1: DS1302_TimeSet();break;
+C51 COMPILER V9.60.7.0   MAIN                                                              07/26/2026 21:43:03 PAGE 5   
+
+ 239   3          }
+ 240   2        }
+ 241   1      }
+ 242          
+ 243          void Timer0_FlashFlag() interrupt 1
+ 244          {
+ 245   1        static unsigned int Timer0Count;
+ 246   1        TL0 = 0x18;
+ 247   1        TH0 = 0xFC;
+ 248   1        Timer0Count++;
+ 249   1        if (Timer0Count >= 500)
+ 250   1        {
+ 251   2          Timer0Count = 0;
+ 252   2          if (MODE == 1)
+ 253   2          TimeSetFlashFlag = !TimeSetFlashFlag;
+ 254   2          else 
+ 255   2          TimeSetFlashFlag = 0;
+ 256   2        }
+ 257   1      
+ 258   1      }
+ 259          
+ 260          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1277    ----
+   CONSTANT SIZE    =      3    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

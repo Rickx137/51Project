@@ -1,0 +1,23 @@
+Rebuild target 'Target 1'
+compiling main.c...
+compiling DS1302.c...
+compiling Key.c...
+compiling Delay.c...
+compiling LCD1602.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?KEY?KEY
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCD1602_SHOWCHAR?LCD1602
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCD1602_SHOWSIGNEDNUM?LCD1602
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCD1602_SHOWHEX?LCD1602
+
+Program Size: data=42.0 xdata=0 code=1742
+creating hex file from ".\Objects\1"...
+".\Objects\1" - 0 Error(s), 4 Warning(s).
+Build Time Elapsed:  00:00:01

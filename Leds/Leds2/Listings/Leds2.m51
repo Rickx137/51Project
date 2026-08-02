@@ -1,0 +1,146 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    07/10/2026  10:13:53  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+D:\KEIL\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\Delay.obj, .\Objects\Leds.obj TO .\Objects\Leds2 PRINT (.\Listing
+>> s\Leds2.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\Delay.obj (DELAY)
+  .\Objects\Leds.obj (LEDS)
+  D:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  .\Objects\Leds2 (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00C1H     UNIT         ?PR?_LEDS?LEDS
+            CODE    00C4H     0016H     UNIT         ?PR?_DELAY?DELAY
+            CODE    00DAH     000CH     UNIT         ?C_C51STARTUP
+            CODE    00E6H     0009H     UNIT         ?PR?MAIN?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\Leds2 (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN
+  +--> ?PR?_LEDS?LEDS
+
+?PR?_LEDS?LEDS
+  +--> ?PR?_DELAY?DELAY
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\Leds2 (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  07/10/2026  10:13:53  PAGE 2
+
+
+  C:00E6H         PUBLIC        main
+  -------         PROC          MAIN
+  C:00E6H         LINE#         4
+  C:00E6H         LINE#         5
+  C:00E6H         LINE#         6
+  C:00E6H         LINE#         7
+  C:00E6H         LINE#         8
+  C:00EDH         LINE#         9
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:00C4H         PUBLIC        _Delay
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:00C4H         LINE#         2
+  C:00C4H         LINE#         3
+  C:00C4H         LINE#         5
+  C:00CEH         LINE#         6
+  C:00CEH         LINE#         7
+  C:00CFH         LINE#         8
+  C:00D1H         LINE#         9
+  C:00D3H         LINE#         11
+  C:00D3H         LINE#         12
+  C:00D5H         LINE#         13
+  C:00D7H         LINE#         14
+  C:00D9H         LINE#         15
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        DELAY
+
+  -------         MODULE        LEDS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  C:0003H         PUBLIC        _Leds
+  B:00A0H.2       PUBLIC        P2_2
+  B:00A0H.3       PUBLIC        P2_3
+  B:00A0H.4       PUBLIC        P2_4
+  -------         PROC          _LEDS
+  D:0007H         SYMBOL        Location
+  D:0005H         SYMBOL        Num
+  C:0003H         LINE#         3
+  C:0003H         LINE#         4
+  C:0003H         LINE#         5
+  C:0030H         LINE#         6
+  C:0030H         LINE#         7
+  C:0034H         LINE#         8
+  C:003CH         LINE#         9
+  C:0040H         LINE#         10
+  C:0048H         LINE#         11
+  C:004CH         LINE#         12
+  C:0054H         LINE#         13
+  C:0058H         LINE#         14
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  07/10/2026  10:13:53  PAGE 3
+
+
+  C:005EH         LINE#         15
+  C:005EH         LINE#         16
+  C:0089H         LINE#         17
+  C:0089H         LINE#         18
+  C:008EH         LINE#         19
+  C:0093H         LINE#         20
+  C:0098H         LINE#         21
+  C:009DH         LINE#         22
+  C:00A2H         LINE#         23
+  C:00A7H         LINE#         24
+  C:00ACH         LINE#         25
+  C:00B1H         LINE#         26
+  C:00B6H         LINE#         27
+  C:00B9H         LINE#         28
+  C:00B9H         LINE#         29
+  C:00C0H         LINE#         30
+  C:00C3H         LINE#         31
+  -------         ENDPROC       _LEDS
+  -------         ENDMOD        LEDS
+
+Program Size: data=9.0 xdata=0 code=239
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

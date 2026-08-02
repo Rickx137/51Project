@@ -1,0 +1,3 @@
+".\Objects\main.obj" 
+TO ".\Objects\Timer1" 
+PRINT(".\Listings\Timer1.m51") RAMSIZE(256) 

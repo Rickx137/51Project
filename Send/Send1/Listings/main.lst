@@ -1,0 +1,74 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              07/14/2026 15:39:33 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.ls
+                    -t) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include <Delay.h>
+   3          #include <uart.h>
+   4          volatile unsigned char SendFlag = 0;
+   5          volatile unsigned char Sec = 0;
+   6          
+   7          
+   8          void main()
+   9          {
+  10   1        UART_Init();
+  11   1        while(1)
+  12   1        {
+  13   2          if (SendFlag)
+  14   2          {
+  15   3            SendFlag = 0;
+  16   3            UART_SendByte(Sec);
+  17   3            UART_SendByte(0x41);
+  18   3          }
+  19   2        }
+  20   1        
+  21   1        
+  22   1      }
+  23            
+  24          void Timer0() interrupt 1
+  25          {
+  26   1        
+  27   1        static unsigned int Timer0Counts = 0;
+  28   1        
+  29   1        TH0 = 0xFC;
+  30   1        TL0 = 0x66;
+  31   1        Timer0Counts++;
+  32   1        if(Timer0Counts >=1000)
+  33   1        {
+  34   2          SendFlag = 1;
+  35   2          Sec++;
+  36   2          Timer0Counts = 0;
+  37   2        }
+  38   1      }
+  39            
+  40          void UART_R() interrupt 4
+  41          {
+  42   1        if(RI == 1)
+  43   1        {
+  44   2          RI = 0;
+  45   2          P2 = SBUF;
+  46   2        }
+  47   1      }
+  48            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     74    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              07/14/2026 15:39:33 PAGE 2   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,7 @@
+".\Objects\main.obj",
+".\Objects\Delay.obj",
+".\Objects\Key.obj",
+".\Objects\Buzzer.obj",
+".\Objects\Leds.obj" 
+TO ".\Objects\Buzzer" 
+PRINT(".\Listings\Buzzer.m51") RAMSIZE(256) 

@@ -1,0 +1,6 @@
+".\Objects\main.obj",
+".\Objects\Led8x8.obj",
+".\Objects\Delay.obj",
+".\Objects\Timer0.obj" 
+TO ".\Objects\Led2" 
+PRINT(".\Listings\Led2.m51") RAMSIZE(256) 

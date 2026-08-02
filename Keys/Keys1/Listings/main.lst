@@ -1,0 +1,60 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              07/23/2026 10:54:16 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.ls
+                    -t) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include <Delay.h>
+   3          #include <Leds.h>
+   4          #include <Keys.h>
+   5          void main()
+   6          {
+   7   1        unsigned char i = 0;
+   8   1        unsigned char Location = 1;
+   9   1        unsigned char Num = 0;
+  10   1        unsigned char Data[9] = {255,255,255,255,255,255,255,255,255};
+  11   1        while(1)
+  12   1        {
+  13   2          Num = Keys();
+  14   2          if(Num >= 0 && Num <= 9)
+  15   2          {
+  16   3            Data[Location] = Num;
+  17   3            Location++;
+  18   3            if(Location > 8)
+  19   3              Location = 1;
+  20   3            
+  21   3          } 
+  22   2          
+  23   2          else if(Num == 16)
+  24   2          {
+  25   3            for (i = 1;i <= 8;i++)
+  26   3            {
+  27   4              Data[i] = 255;
+  28   4            }
+  29   3              Location = 1;
+  30   3          }
+  31   2          for (i = 1;i <= 8;i++)
+  32   2            {
+  33   3              Leds(i,Data[i]);
+  34   3            }
+  35   2        }
+  36   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    113    ----
+   CONSTANT SIZE    =      9    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
