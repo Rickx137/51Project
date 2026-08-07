@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              08/06/2026 17:46:09 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/07/2026 10:33:00 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -19,30 +19,39 @@ line level    source
    9   1        float T;
   10   1        
   11   1        LCD1602_Init();
-  12   1        while(1)
-  13   1        {
-  14   2          DS18B20_Start();
-  15   2          Delay(750);
-  16   2          T = DS18B20_ReadT();
-  17   2          if(T < 0)
-  18   2          {
-  19   3            LCD1602_ShowChar(1,1,'-');
-  20   3            T = -T;
-  21   3          }
-  22   2          else
-  23   2          {
-  24   3            LCD1602_ShowChar(1,1,'+');
-  25   3          }
-  26   2          LCD1602_ShowNum(1,2,T,3);
-  27   2          LCD1602_ShowChar(1,5,'.');
-  28   2          LCD1602_ShowNum(1,6,(unsigned long)(T*10000)%10000,4);
-  29   2        }
-  30   1      }
+  12   1        //DS18B20_BitSet(10);//设置为10bit，第一次烧录后可注释掉，已存入eeprom里
+  13   1        while(1)
+  14   1        {
+  15   2          if(DS18B20_Start() == 1)//测量温度
+  16   2          {
+  17   3            LCD1602_ShowString(1,1,"Err   ");
+  18   3          }
+  19   2          else
+  20   2          {
+  21   3            while(!OneWire_ReceiveBit());//测温时返回0，完成返回1，以此判断
+  22   3            T = DS18B20_ReadT();
+  23   3            if(T < 0)
+  24   3            {
+  25   4              LCD1602_ShowChar(1,1,'-');
+  26   4              T = -T;
+  27   4            }
+  28   3            else
+  29   3            {
+  30   4              LCD1602_ShowChar(1,1,'+');
+  31   4            }
+  32   3            LCD1602_ShowNum(1,2,T,2);
+  33   3            LCD1602_ShowChar(1,4,'.');
+  34   3            LCD1602_ShowNum(1,5,(unsigned long)(T*100)%100,2);//显示小数部分
+  35   3      
+  36   3          }
+  37   2      
+  38   2        }
+  39   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    160    ----
-   CONSTANT SIZE    =   ----    ----
+   CODE SIZE        =    175    ----
+   CONSTANT SIZE    =      7    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       4

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ONEWIRE                                                           08/06/2026 22:13:02 PAGE 1   
+C51 COMPILER V9.60.7.0   ONEWIRE                                                           08/07/2026 10:26:33 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ONEWIRE
@@ -24,7 +24,7 @@ line level    source
   14   1          AckBit = OneWire_DQ;
   15   1          i = 158;while (--i);//Delay 350us
   16   1          EA = 1;
-  17   1          return AckBit;
+  17   1          return AckBit;//确定从机是否存在（存在返回0，因为待机状态有上拉电阻置1）
   18   1      }
   19          void OneWire_WriteBit(unsigned char Bit)
   20          {
@@ -62,7 +62,7 @@ line level    source
   52   1      }
   53          unsigned char OneWire_ReceiveByte(void)
   54          {
-C51 COMPILER V9.60.7.0   ONEWIRE                                                           08/06/2026 22:13:02 PAGE 2   
+C51 COMPILER V9.60.7.0   ONEWIRE                                                           08/07/2026 10:26:33 PAGE 2   
 
   55   1          unsigned char i;
   56   1          unsigned char Byte = 0x00;

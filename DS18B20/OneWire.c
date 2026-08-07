@@ -14,7 +14,7 @@ unsigned char OneWire_Init(void)
     AckBit = OneWire_DQ;
     i = 158;while (--i);//Delay 350us
     EA = 1;
-    return AckBit;
+    return AckBit;//确定从机是否存在（存在返回0，因为待机状态有上拉电阻置1）
 }
 void OneWire_WriteBit(unsigned char Bit)
 {

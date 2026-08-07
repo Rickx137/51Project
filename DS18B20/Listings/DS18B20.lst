@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   DS18B20                                                           08/06/2026 17:45:13 PAGE 1   
+C51 COMPILER V9.60.7.0   DS18B20                                                           08/07/2026 10:31:09 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE DS18B20
@@ -10,42 +10,86 @@ line level    source
 
    1          #include <REGX52.H>
    2          #include "OneWire.h"
-   3          
-   4          #define DS18B20_SkipRom     0xCC
-   5          #define DS18B20_ConvertT    0x44
-   6          #define DS18B20_ReadScratchpad     0xBE
-   7          
-   8          void DS18B20_Start(void)
-   9          {
-  10   1          OneWire_Init();
-  11   1          OneWire_WriteByte(DS18B20_SkipRom);
-  12   1          OneWire_WriteByte(DS18B20_ConvertT);
-  13   1      }
-  14          
-  15          float DS18B20_ReadT(void)
-  16          {
-  17   1          unsigned char TLSB,TMSB;
-  18   1          int Temp;
-  19   1          float T;
-  20   1          OneWire_Init();
-  21   1      
-  22   1          OneWire_WriteByte(DS18B20_SkipRom);
-  23   1          OneWire_WriteByte(DS18B20_ReadScratchpad);
-  24   1          TLSB = OneWire_ReceiveByte();
-  25   1          TMSB = OneWire_ReceiveByte();
-  26   1          Temp = (TLSB | (TMSB << 8));
-  27   1          T = Temp /16.0;
-  28   1          return T;
-  29   1      
-  30   1      }
+   3          #include "Delay.h"
+   4          #include "LCD1602.h"
+   5          
+   6          #define DS18B20_SkipRom     0xCC
+   7          #define DS18B20_ConvertT    0x44
+   8          #define DS18B20_ReadScratchpad      0xBE
+   9          #define DS18B20_WriteScratchppad    0x4E
+  10          #define DS18B20_CopyScratchpad      0x48
+  11          
+  12          unsigned char DS18B20_Start(void)
+  13          {
+  14   1          unsigned char Ack;
+  15   1          Ack = OneWire_Init();
+  16   1          if (Ack)
+  17   1          {
+  18   2              return 1;
+  19   2          }
+  20   1          OneWire_WriteByte(DS18B20_SkipRom);
+  21   1          OneWire_WriteByte(DS18B20_ConvertT);
+  22   1          return 0;
+  23   1      
+  24   1      }
+  25          
+  26          float DS18B20_ReadT(void)
+  27          {
+  28   1          unsigned char TLSB,TMSB;
+  29   1          int Temp;
+  30   1          float T;
+  31   1          OneWire_Init();
+  32   1      
+  33   1          OneWire_WriteByte(DS18B20_SkipRom);
+  34   1          OneWire_WriteByte(DS18B20_ReadScratchpad);
+  35   1          TLSB = OneWire_ReceiveByte();
+  36   1          TMSB = OneWire_ReceiveByte();
+  37   1          Temp = (TLSB | (TMSB << 8));
+  38   1          T = Temp /16.0;
+  39   1          return T;
+  40   1      
+  41   1      }
+  42          void DS18B20_BitSet(unsigned char Bit)
+  43          {
+  44   1          unsigned char BIT;
+  45   1      
+  46   1          switch(Bit)
+  47   1          {
+  48   2              case 9:
+  49   2                  BIT = 0x1F;
+  50   2                  break;
+  51   2              case 10:
+  52   2                  BIT = 0x3F;
+  53   2                  break;
+  54   2              case 11:
+C51 COMPILER V9.60.7.0   DS18B20                                                           08/07/2026 10:31:09 PAGE 2   
+
+  55   2                  BIT = 0x5F;
+  56   2                  break;
+  57   2              default:
+  58   2                  BIT = 0x7F;//12bit
+  59   2                  break;
+  60   2          }
+  61   1          OneWire_Init();
+  62   1          OneWire_WriteByte(DS18B20_SkipRom);
+  63   1          OneWire_WriteByte(DS18B20_WriteScratchppad);
+  64   1          OneWire_WriteByte(0x23);//最高阈值
+  65   1          OneWire_WriteByte(0x14);//最低阈值
+  66   1          OneWire_WriteByte(BIT);//精度设置
+  67   1      
+  68   1          OneWire_Init();
+  69   1          OneWire_WriteByte(DS18B20_SkipRom);
+  70   1          OneWire_WriteByte(DS18B20_CopyScratchpad);//保存设置至eeprom
+  71   1          Delay(50);
+  72   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     56    ----
+   CODE SIZE        =    143    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----       1
+   DATA SIZE        =   ----       2
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
