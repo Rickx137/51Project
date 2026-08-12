@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              08/07/2026 10:33:00 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/12/2026 22:37:08 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -13,48 +13,146 @@ line level    source
    3          #include "Delay.h"
    4          #include "OneWire.h"
    5          #include "DS18B20.h"
-   6          
-   7          void main()
-   8          {
-   9   1        float T;
-  10   1        
-  11   1        LCD1602_Init();
-  12   1        //DS18B20_BitSet(10);//设置为10bit，第一次烧录后可注释掉，已存入eeprom里
-  13   1        while(1)
-  14   1        {
-  15   2          if(DS18B20_Start() == 1)//测量温度
-  16   2          {
-  17   3            LCD1602_ShowString(1,1,"Err   ");
-  18   3          }
-  19   2          else
-  20   2          {
-  21   3            while(!OneWire_ReceiveBit());//测温时返回0，完成返回1，以此判断
-  22   3            T = DS18B20_ReadT();
-  23   3            if(T < 0)
-  24   3            {
-  25   4              LCD1602_ShowChar(1,1,'-');
-  26   4              T = -T;
-  27   4            }
-  28   3            else
-  29   3            {
-  30   4              LCD1602_ShowChar(1,1,'+');
-  31   4            }
-  32   3            LCD1602_ShowNum(1,2,T,2);
-  33   3            LCD1602_ShowChar(1,4,'.');
-  34   3            LCD1602_ShowNum(1,5,(unsigned long)(T*100)%100,2);//显示小数部分
-  35   3      
-  36   3          }
-  37   2      
-  38   2        }
-  39   1      }
+   6          #include "Timer0.h"
+   7          #include "Key.h"
+   8          #include "AT24C02.h"
+   9          #include "Buzzer.h"
+  10          
+  11          void main()
+  12          {
+  13   1        float T;
+  14   1        float TD;
+  15   1        char TLow;
+  16   1        char THigh;
+  17   1        unsigned char K;
+  18   1        LCD1602_Init();
+  19   1        Timer0_Init();
+  20   1        THigh = AT24C02_ReciveByte(0);
+  21   1        TLow = (signed char)AT24C02_ReciveByte(1);
+  22   1        if(THigh > 125 || TLow < -55 || THigh <= TLow)
+  23   1        {
+  24   2          THigh = 35;
+  25   2          TLow = 18;
+  26   2          AT24C02_WriteByte(0,THigh);
+  27   2          Delay(5);
+  28   2          AT24C02_WriteByte(1,TLow);
+  29   2          Delay(5);
+  30   2        }
+  31   1        //DS18B20_BitSet(10);//设置为10bit，第一次烧录后可注释掉，已存入eeprom里
+  32   1        while(1)
+  33   1        {
+  34   2          if(DS18B20_Start() == 1)//测量温度
+  35   2          {
+  36   3            LCD1602_ShowString(1,1,"Err   ");
+  37   3            LCD1602_ShowString(2,1,"                ");
+  38   3          }
+  39   2          else
+  40   2          {
+  41   3            K = KEY();
+  42   3            LCD1602_ShowString(1,1,"T:");
+  43   3            LCD1602_ShowString(2,7,"TL:");
+  44   3            LCD1602_ShowString(2,1,"TH:");
+  45   3            if(K)
+  46   3            {
+  47   4              if(K == 1)
+  48   4              {
+  49   5                THigh++;
+  50   5                if(THigh >= 125)
+  51   5                {
+  52   6                  THigh = 125;
+  53   6                }
+  54   5              }
+C51 COMPILER V9.60.7.0   MAIN                                                              08/12/2026 22:37:08 PAGE 2   
+
+  55   4              else if(K == 2)
+  56   4              {
+  57   5                THigh--;
+  58   5                if(THigh <= TLow)
+  59   5                {
+  60   6                  THigh++;
+  61   6                }
+  62   5              }
+  63   4              else if(K == 3)
+  64   4              {
+  65   5                TLow++;
+  66   5                if(TLow >= THigh)
+  67   5                {
+  68   6                  TLow--;
+  69   6                }
+  70   5              }
+  71   4              else if(K == 4)
+  72   4              {
+  73   5                TLow--;
+  74   5                if(TLow <= -55)
+  75   5                {
+  76   6                  TLow = -55;
+  77   6                }
+  78   5              }
+  79   4              AT24C02_WriteByte(0,THigh);
+  80   4              Delay(5);
+  81   4              AT24C02_WriteByte(1,TLow);
+  82   4              Delay(5);
+  83   4            }
+  84   3            LCD1602_ShowSignedNum(2,4,THigh,2);
+  85   3            LCD1602_ShowSignedNum(2,10,TLow,2);
+  86   3            while(!OneWire_ReceiveBit());//测温时返回0，完成返回1，以此判断
+  87   3            T = DS18B20_ReadT();
+  88   3            if(T < 0)
+  89   3            {
+  90   4              LCD1602_ShowChar(1,3,'-');
+  91   4              TD = -T;
+  92   4            }
+  93   3            else
+  94   3            {
+  95   4              LCD1602_ShowChar(1,3,'+');
+  96   4              TD = T;
+  97   4            }
+  98   3            LCD1602_ShowNum(1,4,TD,2);
+  99   3            LCD1602_ShowChar(1,6,'.');
+ 100   3            LCD1602_ShowNum(1,7,(unsigned long)(TD*100)%100,2);//显示小数部分
+ 101   3            if(T >= THigh)
+ 102   3            {
+ 103   4              LCD1602_ShowString(1,11,"H!");
+ 104   4              Buzzer_Time(500);
+ 105   4            }
+ 106   3            else if(T <= TLow)
+ 107   3            {
+ 108   4              LCD1602_ShowString(1,11,"L!");
+ 109   4              Buzzer_Time(500);
+ 110   4            }
+ 111   3            else if(T < THigh && T > TLow)
+ 112   3            {
+ 113   4              LCD1602_ShowString(1,11,"  ");
+ 114   4            }
+ 115   3      
+ 116   3          }
+C51 COMPILER V9.60.7.0   MAIN                                                              08/12/2026 22:37:08 PAGE 3   
+
+ 117   2      
+ 118   2        }
+ 119   1      }
+ 120          
+ 121          
+ 122          void Timer0() interrupt 1
+ 123          {
+ 124   1        static unsigned int Counts = 0;
+ 125   1        TL0 = 0x18;
+ 126   1        TH0 = 0xFC;
+ 127   1        Counts++;
+ 128   1        if(Counts >= 20)
+ 129   1        {
+ 130   2          Counts = 0;
+ 131   2          Key_Loop();
+ 132   2        }
+ 133   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    175    ----
-   CONSTANT SIZE    =      7    ----
+   CODE SIZE        =    696    ----
+   CONSTANT SIZE    =     44    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----       4
+   DATA SIZE        =      2      11
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

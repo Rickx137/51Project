@@ -1,0 +1,82 @@
+C51 COMPILER V9.60.7.0   KEY                                                               08/12/2026 22:37:08 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN .\Objects\Key.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE Key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Key.lst)
+                    - TABS(2) OBJECT(.\Objects\Key.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          unsigned char KEYNUM = 0;
+   4          unsigned char Key_GetState(void)
+   5          {
+   6   1          unsigned char KeyNum = 0;
+   7   1          if(P3_1==0)
+   8   1          {
+   9   2              KeyNum = 1;
+  10   2          }
+  11   1           if(P3_0==0)
+  12   1          {
+  13   2              KeyNum = 2;
+  14   2          }
+  15   1           if(P3_2==0)
+  16   1          {
+  17   2              KeyNum = 3;
+  18   2          }
+  19   1           if(P3_3==0)
+  20   1          {
+  21   2              KeyNum = 4;
+  22   2          }
+  23   1          return KeyNum;
+  24   1      }
+  25          
+  26          void Key_Loop(void)
+  27          {
+  28   1          unsigned char KeyNum_Last = 0;
+  29   1          static unsigned char KeyNum_Now = 0;
+  30   1          KeyNum_Last = KeyNum_Now;
+  31   1      
+  32   1          KeyNum_Now = Key_GetState();
+  33   1          if(KeyNum_Last == 1 && KeyNum_Now == 0)
+  34   1          {
+  35   2              KEYNUM = 1;
+  36   2          }
+  37   1          if(KeyNum_Last == 2 && KeyNum_Now == 0)
+  38   1          {
+  39   2              KEYNUM = 2;
+  40   2          }
+  41   1          if(KeyNum_Last == 3 && KeyNum_Now == 0)
+  42   1          {
+  43   2              KEYNUM = 3;
+  44   2          }
+  45   1          if(KeyNum_Last == 4 && KeyNum_Now == 0)
+  46   1          {
+  47   2              KEYNUM = 4;
+  48   2          }
+  49   1      }
+  50          unsigned char KEY(void)
+  51          {
+  52   1          unsigned char Temp = 0;
+  53   1          Temp = KEYNUM;
+  54   1          KEYNUM = 0;
+C51 COMPILER V9.60.7.0   KEY                                                               08/12/2026 22:37:08 PAGE 2   
+
+  55   1          return Temp;
+  56   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     76    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

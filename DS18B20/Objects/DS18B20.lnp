@@ -2,6 +2,11 @@
 ".\Objects\LCD1602.obj",
 ".\Objects\Delay.obj",
 ".\Objects\OneWire.obj",
-".\Objects\DS18B20.obj" 
+".\Objects\DS18B20.obj",
+".\Objects\Key.obj",
+".\Objects\Timer0.obj",
+".\Objects\AT24C02.obj",
+".\Objects\I2C.obj",
+".\Objects\Buzzer.obj" 
 TO ".\Objects\DS18B20" 
 PRINT(".\Listings\DS18B20.m51") RAMSIZE(256) 

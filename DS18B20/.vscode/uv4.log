@@ -1,16 +1,12 @@
 Build target 'Target 1'
-compiling main.c...
 linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_LCD1602_SHOWSIGNEDNUM?LCD1602
-
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_LCD1602_SHOWHEX?LCD1602
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_DS18B20_BITSET?DS18B20
 
-Program Size: data=39.0 xdata=0 code=2094
+Program Size: data=44.0 xdata=0 code=3134
 creating hex file from ".\Objects\DS18B20"...
-".\Objects\DS18B20" - 0 Error(s), 3 Warning(s).
+".\Objects\DS18B20" - 0 Error(s), 2 Warning(s).
 Build Time Elapsed:  00:00:00
