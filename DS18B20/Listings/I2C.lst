@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   I2C                                                               08/12/2026 22:37:08 PAGE 1   
+C51 COMPILER V9.60.7.0   I2C                                                               08/13/2026 12:10:07 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE I2C
@@ -62,7 +62,7 @@ line level    source
   52   1          I2C_SCL = 0;//将scl变为0，使sda可变，并且防止sda变化触发s/p
   53   1          I2C_SDA = 1;//释放总线，使sda可写
   54   1       
-C51 COMPILER V9.60.7.0   I2C                                                               08/12/2026 22:37:08 PAGE 2   
+C51 COMPILER V9.60.7.0   I2C                                                               08/13/2026 12:10:07 PAGE 2   
 
   55   1          I2C_SCL = 1;//读取sda的状态
   56   1          AckBit = I2C_SDA;
